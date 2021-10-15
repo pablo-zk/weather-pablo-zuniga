@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+footer {
+  background-color: gainsboro;
+  font-family: "Rock Salt";
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin: 0;
+  left: 0;
+  text-align: center;
+  padding: 5px; }
+  footer p {
+    margin: 0; }
+
+body {
+  font-family: "Poppins", sans-serif; }
+
+span {
+  font-weight: bold; }
+
+img {
+  width: 75px; }
+
+.navbar {
+  background-color: gainsboro;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: 1em;
+  padding-right: 1em; }
+  .navbar h1 {
+    font-weight: bold;
+    font-size: 30px; }
+
+.temp-max {
+  font-weight: bold; }
+
+.temp-min {
+  color: #f9d11d;
+  font-weight: bold; }
+
+.offcanvas {
+  width: 250px;
+  background-color: gainsboro;
+  color: whitesmoke;
+  border: none;
+  box-shadow: 10px 0 5px -2px #888; }
+  .offcanvas .offcanvas-header {
+    margin-top: 10px; }
+    .offcanvas .offcanvas-header .offcanvas-title {
+      color: black;
+      font-weight: bold; }
+  .offcanvas .offcanvas-body .btn:hover {
+    background-color: darkgray; }
+    .offcanvas .offcanvas-body .btn:hover i {
+      color: whitesmoke; }
+
+.forecast,
+.tiempo {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: whitesmoke;
+  margin-top: 40px; }
+
+.tiempo {
+  border-radius: 15px;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: 1em;
+  padding-right: 1em; }
+
+table tbody tr {
+  color: whitesmoke;
+  text-align: center;
+  vertical-align: middle; }
+  table tbody tr td p {
+    margin: auto; }
+
+.resultados {
+  margin-top: 15px;
+  margin-bottom: 30px; }
+  .resultados .tiempo {
+    background: #00b4da;
+    background: linear-gradient(0deg, rgba(0, 180, 218, 0.8070825742) 0%, #2b2f87 100%); }
+  .resultados .forecast {
+    border-radius: 15px;
+    font-size: 1.25em; }
+    .resultados .forecast img {
+      width: 40px; }
+
+.btn {
+  background-color: #f9d11d;
+  opacity: 1; }
+
+.btn:hover {
+  background-color: darkgray;
+  color: whitesmoke; }
+
+i {
+  color: black; }
+
+.container-data {
+  margin-top: 40px; }
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,25 @@
+$red: rgba(230, 41, 41, 0.844);
+$blue: rgb(18, 93, 231);
+$white: whitesmoke;
+$yellow: #f9d11d;
+
+$secondary-color: darken($white, 10%);
+$secondary-yellow: darken($yellow, 20%);
+$bg-white-opacity: rgba(255, 255, 255, 0.9);
+$bg-black-opacity: rgba(0, 0, 0, 0.6);
+$accent: darken($secondary-color, 20%);
+
+$body-bg: $white;
+$gradient-solid-bg: rgb(0, 180, 218);
+$gradient-bg: linear-gradient(
+  0deg,
+  rgba(0, 180, 218, 0.8070825742406338) 0%,
+  rgba(43, 47, 135, 1) 100%
+);
+
+$font-family: "Poppins", sans-serif;
+$font-size-base: 1;
+$font-weight-base: bold;
+
+$padding-x: 1 + em;
+$padding-y: 1 + em;

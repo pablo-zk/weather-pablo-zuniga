@@ -1,0 +1,21 @@
+@import "_variables.scss";
+
+@mixin padding-xy($x, $y) {
+  padding: {
+    top: $y;
+    bottom: $y;
+    left: $x;
+    right: $x;
+  }
+}
+
+@mixin data-box() {
+  background-color: $bg-black-opacity;
+  color: $white;
+  margin-top: 40px;
+}
+
+@mixin gradient-bg() {
+  background: $gradient-solid-bg;
+  background: $gradient-bg;
+}

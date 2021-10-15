@@ -2,118 +2,188 @@ $(function () {
   apiKEY = "992682d486cb8a7de0b93c8fd7e45c78";
   ApiUrl =
     "https://api.openweathermap.org/data/2.5/weather?units=metric&lang=es";
+  ApiUrlForecast =
+    "https://api.openweathermap.org/data/2.5/onecall?units=metric&lang=es&exclude=current,minutely,hourly&lat=";
 
+  //AL CARGAR LA PÁGINA UNICAMENTE SE MUESTRA EL CONTAINER DEL HOME.
+  //TANTO LAS OTRAS DOS VENTANAS COMO LAS CAJAS PARA LOS RESULTADOS PERMACEN OCULTOS.
   $("#home").show();
   $("#buscar").hide();
   $("#localizacion").hide();
+  $("#result-tmp-city").hide();
+  $("#result-tmp-gps").hide();
 
   $("#home-btn").on("click", function () {
     $("#home").show();
     $("#buscar").hide();
     $("#localizacion").hide();
   });
+
   $("#buscar-btn").on("click", function () {
     $("#home").hide();
     $("#buscar").show();
     $("#localizacion").hide();
   });
+
   $("#localizacion-btn").on("click", function (event) {
     event.preventDefault();
     $("#home").hide();
     $("#buscar").hide();
     $("#localizacion").show();
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        var lat = position.coords.latitude;
-        var long = position.coords.longitude;
-        getWeatherByPosition(lat, long);
-        console.log(
-          "Found your location nLat : " +
-            position.coords.latitude +
-            " nLang :" +
-            position.coords.longitude
-        );
-      });
-    } else {
-      console.log("Browser doesn't support geolocation!");
-    }
+    //RECOGIDA DE LAS COORDENADAS ACTUALES Y LLAMADA AL MÉTODO PARA OBTENER INFORMACIÓN DEL TIEMPO -> VERSIÓN 2
+    // if ("geolocation" in navigator) {
+    //   navigator.geolocation.getCurrentPosition(function (position) {
+    //     var lat = position.coords.latitude;
+    //     var long = position.coords.longitude;
+    //     getWeatherByPosition(lat, long);
+    //   });
+    // } else {
+    //   alert("No se ha podido encontrar ubicación");
+    // }
   });
 
-  function getWeather(city) {
-    $.get(ApiUrl + "&q=" + city + "&appid=" + apiKEY, function (tiempo) {
-      var result = "";
-
-      if (tiempo.cod != 401) {
-        var estado = tiempo.weather;
-        var imagen = imagenPorEstado(estado[0].main);
-        result += "<ul><li>Estado el cielo: " + estado[0].main + "</li>";
-        result += "<li>Descripción: " + estado[0].description;
-        result +=
-          "<li>Temperatura:" +
-          tiempo.main.temp +
-          " º</li><ul><li>Max: " +
-          tiempo.main.temp_max +
-          " º</li><li>Min: " +
-          tiempo.main.temp_min +
-          " º</li></ul></ul>";
-      } else {
-        alert("No se ha encontrado el tiempo en ningún país con ese nombre.");
-      }
-      $(".card").html(imagen + "<div class='card-body'>" + result + "</div>");
-      // $(".card-body").html(result);
-    });
+  //FUNCIÓN PARA AÑADIR LA ESTRUCTURA HTML CON LA INFORMACIÓN
+  function anadirHTML(city, temp, estado, tempMax, tempMin, wind, lugar) {
+    var result =
+      "<div class='row'><div class='col'><p>El tiempo en <span>" +
+      city +
+      "</span>: " +
+      estado.description +
+      "</p></div></div>";
+    result +=
+      "<div class='row align-items-center'>" +
+      "<div class='col col-sm-6'><p class='display-3'>" +
+      temp.toFixed(1) + //.toFixed() -> truncar decimales
+      " ºC</p></div>" +
+      "<div class='col col-sm-6'>" +
+      imagenPorEstado(estado.main) + // LLAMADA PARA OBTENER IMAGEN SEGÚN EL ESTADO DEL TIEMPO
+      "</div>" +
+      "</div'></div>" +
+      "<div class='row mt-3'><div class='col-6'>Max: " +
+      tempMax.toFixed(1) +
+      " ºC</div>" +
+      "<div class='col-6'>Min: " +
+      tempMin.toFixed(1) +
+      " ºC</div></div>";
+    $("#" + lugar).html(result);
   }
 
-  function getWeatherByPosition(lat, long) {
+  //FUNCIÓN PARA OBTENER UAN IMAGEN SEGÚN EL ESTADO DEL TIEMPO
+  function imagenPorEstado(estado) {
+    switch (estado) {
+      case "Thunderstorm":
+        return "<img src='../assets/img/Thunderstorm.png' class='img-fluid' alt='Imagen tiempo' >";
+      case "Drizzle":
+        return "<img src='../assets/img/Drizzle.png' class='img-fluid' alt='Imagen tiempo' >";
+      case "Rain":
+        return "<img src='../assets/img/Rain.png' class='img-fluid' alt='Imagen tiempo' >";
+      case "Snow":
+        return "<img src='../assets/img/Snow.png' class='img-fluid' alt='Imagen tiempo' >";
+      case "Atmosphere":
+        return "<img src='../assets/img/Atmosphere.png' class='img-fluid' alt='Imagen tiempo' >";
+      case "Clear":
+        return "<img src='../assets/img/Clear.png' class='img-fluid' alt='Imagen tiempo' >";
+      case "Clouds":
+        return "<img src='../assets/img/Clouds.png' class='img-fluid' alt='Imagen tiempo' >";
+      default:
+        return "<img src='../assets/img/None.png' class='img-fluid' alt='Imagen tiempo' >";
+    }
+  }
+
+  //FUNCIÓN PARA OBTENER INFO DEL PRONÓSTICO TIEMPO
+  function getForecast(lon, lat, lugar) {
     $.get(
-      ApiUrl + "&lat=" + lat + "&lon=" + long + "&appid=" + apiKEY,
+      ApiUrlForecast + lat + "&lon=" + lon + "&appid=" + apiKEY,
       function (tiempo) {
         var result = "";
-
-        if (tiempo.cod != 401) {
-          var estado = tiempo.weather;
-          var imagen = imagenPorEstado(estado[0].main);
-          result += "<ul><li>Ciudad: " + tiempo.name + "</li>";
-          result += "<li>Estado el cielo: " + estado[0].main + "</li>";
-          result += "<li>Descripción: " + estado[0].description;
-          result +=
-            "<li>Temperatura:" +
-            tiempo.main.temp +
-            " º</li><ul><li>Max: " +
-            tiempo.main.temp_max +
-            " º</li><li>Min: " +
-            tiempo.main.temp_min +
-            " º</li></ul></ul>";
-        } else {
-          alert("No se ha encontrado el tiempo en ningún país con ese nombre.");
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+        if (tiempo && tiempo.daily.length > 0) {
+          result =
+            "<div class='row'><div class='col'><table class='table table-borderless forecast'><tbody>";
+          $.each(tiempo.daily, function (index, dias) {
+            if (index < 4) {
+              //SE RECORRE ÚNICAMENTE LOS 4 PRIMEROS DÍAS
+              day += 1;
+              result +=
+                "<tr class='final-table' align=center><td><p>" +
+                ((day < 10 ? "0" : "") + day) +
+                "/" +
+                ((month < 10 ? "0" : "") + month) +
+                "</p></td>" +
+                "<td>" +
+                imagenPorEstado(dias.weather[0].main) + // LLAMADA PARA OBTENER IMAGEN SEGÚN EL ESTADO DEL TIEMPO
+                "</td>" +
+                "<td><p><span class='temp-max'>" +
+                dias.temp.max.toFixed() +
+                "</span>&nbsp&nbsp<span class='temp-min'>" +
+                dias.temp.min.toFixed() +
+                "</span></p></td></tr>";
+            } else {
+              return;
+            }
+          });
+          result += "</tbody></table></div></div>";
         }
-        $("#divLocalizacion").append(imagen);
-        $("#divLocalizacion div.card-body").html(result);
+        $("#" + lugar).append(result);
       }
     );
   }
 
-  function imagenPorEstado(estado) {
-    switch (estado) {
-      case "Thunderstorm":
-        return "<img src='../assets/img/Thunderstorm.png' class='card-img-top' alt=''>";
-      case "Drizzle":
-        return "<img src='../assets/img/Drizzle.png' class='card-img-top' alt=''>";
-      case "Rain":
-        return "<img src='../assets/img/Rain.png' class='card-img-top' alt=''>";
-      case "Snow":
-        return "<img src='../assets/img/Snow.png' class='card-img-top' alt=''>";
-      case "Atmosphere":
-        return "<img src='../assets/img/Atmosphere.png' class='card-img-top' alt=''>";
-      case "Clear":
-        return "<img src='../assets/img/Clear.png' class='card-img-top' alt=''>";
-      case "Clouds":
-        return "<img src='../assets/img/Clouds.png' class='card-img-top' alt=''>";
-      default:
-        return "<img src='../assets/img/None.png' class='card-img-top' alt=''>";
-    }
+  //FUNCIÓN PARA OBTENER INFO DEL TIEMPO POR CIUDAD Y LLAMADA PARA LA INFO DEL PRONÓSTICO
+  function getWeather(city) {
+    $.get(ApiUrl + "&q=" + city + "&appid=" + apiKEY, function (tiempo) {
+      if (tiempo.cod != 401) {
+        $("#result-tmp-city").show();
+        var estado = tiempo.weather;
+        anadirHTML(
+          tiempo.name,
+          tiempo.main.temp,
+          estado[0],
+          tiempo.main.temp_max,
+          tiempo.main.temp_min,
+          tiempo.wind.speed,
+          "result-tmp-city"
+        ); //FUNCIÓN PARA AÑADIR TODA LA ESTRUCTURA HTML Y LA INFORMACIÓN
+        getForecast(tiempo.coord.lon, tiempo.coord.lat, "result-tmp-city"); //LLAMADA A LA FUNCIÓN DEL PRONÓSTICO
+      } else {
+        alert(
+          "No se ha encontrado el tiempo en ninguna ciudad con ese nombre."
+        );
+      }
+    });
   }
 
+  // FUNCIÓN PARA OBTENER EL TIEMPO ACTUAL SEGÚN LOCALIZACIÓN - SE IMPLEMENTARÁ EN LA V2
+  // function getWeatherByPosition(lat, long) {
+  //   $.get(
+  //     ApiUrl + "&lat=" + lat + "&lon=" + long + "&appid=" + apiKEY,
+  //     function (tiempo) {
+  //       if (tiempo.cod != 401) {
+  //         $("#result-tmp-gps").show();
+  //         var estado = tiempo.weather;
+  //         anadirHTML(
+  //           tiempo.name,
+  //           tiempo.main.temp,
+  //           estado[0],
+  //           tiempo.main.temp_max,
+  //           tiempo.main.temp_min,
+  //           tiempo.wind.speed,
+  //           "result-tmp-gps"
+  //         );
+  //         getForecast(long, lat, "result-tmp-gps");
+  //       } else {
+  //         alert(
+  //           "No se ha encontrado el tiempo en ninguna ciudad con ese nombre."
+  //         );
+  //       }
+  //     }
+  //   );
+  // }
+
+  //FUNCIÓN QUE AL DAR CLICK EN EL BOTÓN 'CONSULTAR', LLAMA A OTRA FUNCIÓN PARA RECOGER LA INFORMACION DEL TIEMPO
+  //SEGÚN LA CIUDAD INTRODUCIDA EN EL INPUT
   $("#frm-search .btn").on("click", function (event) {
     event.preventDefault();
     city = $("input[type='text'").val();

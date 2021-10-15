@@ -1,0 +1,108 @@
+@import "_variables.scss";
+@import "_mixins.scss";
+
+body {
+  font-family: $font-family;
+}
+span {
+  font-weight: $font-weight-base;
+}
+img {
+  width: 75px;
+}
+
+.navbar {
+  background-color: $secondary-color;
+  @include padding-xy($padding-x, $padding-y);
+  h1 {
+    font-weight: $font-weight-base;
+    font-size: 30px;
+  }
+}
+
+.temp-max {
+  font-weight: $font-weight-base;
+}
+.temp-min {
+  color: $yellow;
+  font-weight: $font-weight-base;
+}
+
+.offcanvas {
+  width: 250px;
+  background-color: $secondary-color;
+  color: $white;
+  border: none;
+  box-shadow: 10px 0 5px -2px #888;
+  .offcanvas-header {
+    margin-top: 10px;
+    .offcanvas-title {
+      color: black;
+      font-weight: $font-weight-base;
+    }
+  }
+  .offcanvas-body {
+    .btn:hover {
+      background-color: $accent;
+      i {
+        color: $white;
+      }
+    }
+  }
+}
+
+.forecast,
+.tiempo {
+  @include data-box();
+}
+.tiempo {
+  border-radius: 15px;
+  @include padding-xy($padding-x, $padding-y);
+}
+
+table {
+  tbody {
+    tr {
+      color: $white;
+      text-align: center;
+      vertical-align: middle;
+      td {
+        p {
+          margin: auto;
+        }
+      }
+    }
+  }
+}
+
+.resultados {
+  margin-top: 15px;
+  margin-bottom: 30px;
+  .tiempo {
+    @include gradient-bg();
+  }
+  .forecast {
+    border-radius: 15px;
+    font-size: $font-size-base + 0.25 + em;
+    img {
+      width: 40px;
+    }
+  }
+}
+
+.btn {
+  background-color: $yellow;
+  opacity: 1;
+}
+.btn:hover {
+  background-color: $accent;
+  color: $white;
+}
+
+i {
+  color: black;
+}
+
+.container-data {
+  margin-top: 40px;
+}

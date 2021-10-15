@@ -1,0 +1,16 @@
+@import "_variables.scss";
+
+footer {
+  background-color: $secondary-color;
+  font-family: "Rock Salt";
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin: 0;
+  left: 0;
+  text-align: center;
+  padding: 5px;
+  p {
+    margin: 0;
+  }
+}
