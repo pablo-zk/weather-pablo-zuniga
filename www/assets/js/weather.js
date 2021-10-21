@@ -25,23 +25,6 @@ $(function () {
     $("#localizacion").hide();
   });
 
-  $("#localizacion-btn").on("click", function (event) {
-    event.preventDefault();
-    $("#home").hide();
-    $("#buscar").hide();
-    $("#localizacion").show();
-    //RECOGIDA DE LAS COORDENADAS ACTUALES Y LLAMADA AL MÉTODO PARA OBTENER INFORMACIÓN DEL TIEMPO -> VERSIÓN 2
-    // if ("geolocation" in navigator) {
-    //   navigator.geolocation.getCurrentPosition(function (position) {
-    //     var lat = position.coords.latitude;
-    //     var long = position.coords.longitude;
-    //     getWeatherByPosition(lat, long);
-    //   });
-    // } else {
-    //   alert("No se ha podido encontrar ubicación");
-    // }
-  });
-
   //FUNCIÓN PARA AÑADIR LA ESTRUCTURA HTML CON LA INFORMACIÓN
   function anadirHTML(city, temp, estado, tempMax, tempMin, wind, lugar) {
     var result =
@@ -72,21 +55,21 @@ $(function () {
   function imagenPorEstado(estado) {
     switch (estado) {
       case "Thunderstorm":
-        return "<img src='../assets/img/Thunderstorm.png' class='img-fluid' alt='Imagen tiempo' >";
+        return "<img src='./assets/img/Thunderstorm.png' class='img-fluid' alt='Imagen tiempo' >";
       case "Drizzle":
-        return "<img src='../assets/img/Drizzle.png' class='img-fluid' alt='Imagen tiempo' >";
+        return "<img src='./assets/img/Drizzle.png' class='img-fluid' alt='Imagen tiempo' >";
       case "Rain":
-        return "<img src='../assets/img/Rain.png' class='img-fluid' alt='Imagen tiempo' >";
+        return "<img src='./assets/img/Rain.png' class='img-fluid' alt='Imagen tiempo' >";
       case "Snow":
-        return "<img src='../assets/img/Snow.png' class='img-fluid' alt='Imagen tiempo' >";
+        return "<img src='./assets/img/Snow.png' class='img-fluid' alt='Imagen tiempo' >";
       case "Atmosphere":
-        return "<img src='../assets/img/Atmosphere.png' class='img-fluid' alt='Imagen tiempo' >";
+        return "<img src='./assets/img/Atmosphere.png' class='img-fluid' alt='Imagen tiempo' >";
       case "Clear":
-        return "<img src='../assets/img/Clear.png' class='img-fluid' alt='Imagen tiempo' >";
+        return "<img src='./assets/img/Clear.png' class='img-fluid' alt='Imagen tiempo' >";
       case "Clouds":
-        return "<img src='../assets/img/Clouds.png' class='img-fluid' alt='Imagen tiempo' >";
+        return "<img src='./assets/img/Clouds.png' class='img-fluid' alt='Imagen tiempo' >";
       default:
-        return "<img src='../assets/img/None.png' class='img-fluid' alt='Imagen tiempo' >";
+        return "<img src='./assets/img/None.png' class='img-fluid' alt='Imagen tiempo' >";
     }
   }
 
@@ -152,35 +135,78 @@ $(function () {
           "No se ha encontrado el tiempo en ninguna ciudad con ese nombre."
         );
       }
+    }).fail(function () {
+      alert("¡Error! Nombre de ciudad incorrecto.\nPrueba con otra.");
     });
   }
 
   // FUNCIÓN PARA OBTENER EL TIEMPO ACTUAL SEGÚN LOCALIZACIÓN - SE IMPLEMENTARÁ EN LA V2
-  // function getWeatherByPosition(lat, long) {
-  //   $.get(
-  //     ApiUrl + "&lat=" + lat + "&lon=" + long + "&appid=" + apiKEY,
-  //     function (tiempo) {
-  //       if (tiempo.cod != 401) {
-  //         $("#result-tmp-gps").show();
-  //         var estado = tiempo.weather;
-  //         anadirHTML(
-  //           tiempo.name,
-  //           tiempo.main.temp,
-  //           estado[0],
-  //           tiempo.main.temp_max,
-  //           tiempo.main.temp_min,
-  //           tiempo.wind.speed,
-  //           "result-tmp-gps"
-  //         );
-  //         getForecast(long, lat, "result-tmp-gps");
-  //       } else {
-  //         alert(
-  //           "No se ha encontrado el tiempo en ninguna ciudad con ese nombre."
-  //         );
-  //       }
-  //     }
-  //   );
-  // }
+  function getWeatherByPosition(lat, long) {
+    $.get(
+      ApiUrl + "&lat=" + lat + "&lon=" + long + "&appid=" + apiKEY,
+      function (tiempo) {
+        if (tiempo.weather.length) {
+          $("#result-tmp-gps").show();
+          var estado = tiempo.weather;
+          anadirHTML(
+            tiempo.name,
+            tiempo.main.temp,
+            estado[0],
+            tiempo.main.temp_max,
+            tiempo.main.temp_min,
+            tiempo.wind.speed,
+            "result-tmp-gps"
+          );
+          getForecast(long, lat, "result-tmp-gps");
+        } else {
+          alert(
+            "No se ha encontrado el tiempo en ninguna ciudad con ese nombre."
+          );
+        }
+      }
+    ).fail(function () {
+      alert(
+        "¡Error! No se ha podido obtener la ubicación.\nDebe activar la ubicación y aceptar los permisos"
+      );
+    });
+  }
+
+  //METODOS SEGÚN LA RESPUESTA DE 'navigator. geolocation.getCurrentPosition()'. 'onSuccess' LLAMA A LA FUNCIÓN
+  //'getWeatherByPosition' QUE OBTIENE LA INFORMACIÓN DEL TIEMPO.
+  var onSuccess = function (position) {
+    var lat = position.coords.latitude;
+    var long = position.coords.longitude;
+    getWeatherByPosition(lat, long);
+  };
+  function onError(error) {
+    switch (error.code) {
+      case 1:
+        alert("¡ERROR! No se ha podido activar la ubicación.");
+        break;
+      case 2:
+        alert(
+          "¡ERROR! La aplicación no tiene permiso para acceder a la ubicación."
+        );
+        break;
+      case 3:
+        alert("¡ERROR! Timeout expired");
+        break;
+      default:
+        alert("¡ERROR! No se ha podido obtener la ubicación");
+        break;
+    }
+  }
+
+  //FUNCIÓN QUE AL DAR CLICK SOBRE EL BOTÓN DEL MENÚ DE 'LOCALIZACIÓN' SE MUESTRA LA CAJA CORRESPONDIENTE Y SE OCULTAN
+  //LAS DEMÁS. ADEMÁS SE LLAMA AL MÉTODO 'getCurrentPosition' PARA OBTENER LA UBICACIÓN ACTUAL Y ASÍ OBTENER EL TIEMPO
+  $("#localizacion-btn").on("click", function (event) {
+    event.preventDefault();
+    $("#home").hide();
+    $("#buscar").hide();
+    $("#localizacion").show();
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+  });
 
   //FUNCIÓN QUE AL DAR CLICK EN EL BOTÓN 'CONSULTAR', LLAMA A OTRA FUNCIÓN PARA RECOGER LA INFORMACION DEL TIEMPO
   //SEGÚN LA CIUDAD INTRODUCIDA EN EL INPUT

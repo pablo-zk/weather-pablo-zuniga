@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
+    <link rel="shortcut icon" href="../www/assets/img/Rain.png" />
+    <link rel="stylesheet" href="../www/assets/css/bootstrap.min.css" />
+    <title>Bienvenido!</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row mb-4 mt-3 bg-light">
+        <div class="col">
+          <h1>Bienvenido a Weather is sweet yeah!</h1>
+          <p>
+            Has descubierto mi proyecto 'Weather', ahora te explico de que va.
+          </p>
+        </div>
+      </div>
+      <div class="row mb-4 bg-light">
+        <div class="col">
+          <h1 id="proyecto-weather">Proyecto Weather</h1>
+          <p>
+            Proyecto <strong>&#39;weather&#39;</strong> -&gt; Desarrollo de
+            interfaces curso 2021/2022
+          </p>
+          <h2 id="introducci-n">Introducción</h2>
+          <p>
+            El proyecto es una <strong>página web</strong> que ofrece
+            información del <strong>tiempo</strong> de un lugar que tú
+            especifiques o de la ubicación actual del dispositivo.
+          </p>
+          <p>
+            Está información se recoge gracias a la
+            <a href="https://openweathermap.org/api"
+              ><strong>API</strong> de <strong>OpenWeather</strong></a
+            >
+          </p>
+          <h2 id="app">APP</h2>
+          <p>La página consta de <strong>3 partes</strong>:</p>
+          <ul>
+            <li>Menú</li>
+            <li>
+              Formulario para consultar el tiempo de una ciudad en concreto
+            </li>
+            <li>El tiempo de la ubicación del dispositivo</li>
+          </ul>
+          <h2 id="desarrollo">Desarrollo</h2>
+          <p>
+            La parte <strong>lógica</strong> de la web está desarrollada en
+            <strong>jQuery</strong> y la parte de <strong>diseño</strong> en
+            <strong>Sass</strong>.
+          </p>
+          <p>
+            Está diseñada para ser visualizada principalmente en móviles pero se
+            ve correctamente en cualquier tamaño de pantalla.
+          </p>
+          <p>
+            La creación de la APK y el desarrollo para android, lo he hecho
+            mediante <strong>Apache Córdova</strong>
+          </p>
+          <blockquote>
+            <p>Creada y diseñada por <strong>©Pablo Zúñiga</strong></p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
+        <div class="col text-center">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Página web</h5>
+              <p class="card-text">
+                Clica en el botón para visualizar la APP en una página web
+              </p>
+            </div>
+            <div class="card-footer">
+              <a href="../www/index.html" class="btn btn-primary">Página web</a>
+            </div>
+          </div>
+        </div>
+        <div class="col text-center">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Aplicación</h5>
+              <p class="card-text">
+                Clica en el botón para descargar la APK y poder instalar la APP
+                en tu móvil
+              </p>
+            </div>
+            <div class="card-footer">
+              <a
+                href="../dist/pzuniga-weather.apk"
+                download
+                rel="noopener noreferrer"
+                target="_blank"
+                class="btn btn-primary"
+                >Descargar APK</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
